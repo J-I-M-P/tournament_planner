@@ -7,7 +7,7 @@ public class Tournament {
 	private int id;
 	private static int nextID = 0;
 	private String tournamentName, location, filePathName;
-	private long dateMade, dateLastMod;
+	private long dateMade, dateLastMod, startTime;
 	private Team[] teams;
 	
 	public Tournament(){
