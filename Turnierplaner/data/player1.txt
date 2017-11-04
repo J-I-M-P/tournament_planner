@@ -1,0 +1,9 @@
+ID;Nachname;Vorname;Alter;Geschlecht;Handicap;Adresse;Telefon0;Daniel;Jens
+1;Zimmermann;Xenia
+2;Hoffmann;Frank
+3;mueller;hannes
+4;gart;edel
+5;hert;kai
+6;meiser;hans
+7;specht;georg
+8;meiter;knut

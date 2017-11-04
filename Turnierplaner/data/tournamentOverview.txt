@@ -1,0 +1,3 @@
+id;tournamentName;date_made;date_last_edit;tournamentDBfile
+0;Kursturnier F 08-2017;20170815;20171101;kursturnier_F_08-2017_20170815.txt
+1;Freizeitturnier;20170722;20170731;freizeitturnier_20170722.txt
