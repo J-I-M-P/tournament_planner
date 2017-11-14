@@ -4,6 +4,7 @@ id=1
 tournament_name=Freizeitturnier
 date_made=20170722
 date_last_edit=20170731
-
+location=berlin
+filePathName=freizeitturnier_20170722
 tables
 -------------------------------

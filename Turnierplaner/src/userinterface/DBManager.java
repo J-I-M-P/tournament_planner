@@ -17,9 +17,9 @@ public class DBManager {
 									+ "\n"
 					  				+ "01 - spielerdaten einlesen von Datenbank    06 - teamdaten einlesen von Datenbank      11 - Turnierdaten einlesen\n"
 									+ "02 - spieler anzeigen                       07 - team anzeigen                         12 - Turnierdaten anzeigen\n"
-					  				+ "03 - spieler DB auf Konsistenz prüfen       08 - team DB auf Konsistenz prüfen         13 - \n"
-									+ "04 - spieler in datenbak schreiben          09 - team in datenbak schreiben            14 - \n"
-					  				+ "05 - spieler in DB suchen                   10 - team in DB suchen                     15 - \n"
+					  				+ "03 - spieler DB auf Konsistenz prüfen       08 - team DB auf Konsistenz prüfen         13 - turnierübersicht exportieren\n"
+									+ "04 - spieler in datenbak schreiben          09 - team in datenbak schreiben            14 - turniere und übersicht speichern\n"
+					  				+ "05 - spieler in DB suchen                   10 - team in DB suchen                     15 - alt import - neu export\n"
 									+ "\n"
 					  				+ "0 - velassen\n"
 					  				+ "99 - Desktop\n";
@@ -68,14 +68,22 @@ public class DBManager {
 				//team create
 				break;
 			case 11:
-				Import_export_datas.import_tournament_overview_from_file(true);
+				Import_export_datas.importAllTournamentsFromOverview(false);
 				break;
 			case 12:
 				TournamentIOInterface.showAllTournaments();
 				break;
+			case 13:
+				Import_export_datas.exportTournamentOverview();
+				break;
+			case 14:
+				Import_export_datas.saveAllActualTournamentData();
+				break;
+			case 15:
+				Import_export_datas.tournamentOldImportNewExport();
+				break;
 			case 99:
-				System.out.print("-->Desktop");
-				System.exit(0);
+				MainInterface.saveAndQuit();
 			case 0:
 				return;
 			}

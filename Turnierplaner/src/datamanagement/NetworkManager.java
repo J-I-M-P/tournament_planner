@@ -1,5 +1,6 @@
 package datamanagement;
 
-public class NetworkManager {
+import userinterface.MainInterface;
 
+public class NetworkManager {
 }

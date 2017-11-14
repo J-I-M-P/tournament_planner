@@ -15,11 +15,15 @@ public class TournamentIOInterface {
 			String teamDataMenue =  "-----Turnier IO---------\n"
 									+ "\n"
 					  				+ "1 - Alle Turniere anzeigen\n"
-									+ "2 - \n"
+									+ "2 - turnier fortsetzen\n"
 					  				+ "3 - neues Turnier starten\n"
-									+ "4 - turnier anlegen\n"
-					  				+ "5 - Team Menue\n"
-					  				+ "6 - Spieler Menue\n"
+									+ "4 - turnier anlegen (spaeter starten)\n"
+					  				+ "5 - aktuelles turnier setzen\n"
+					  				+ "6 - aktuelles turnier anzeigen\n"
+					  				+ "7 - Team Menue\n"
+					  				+ "8 - Spieler Menue\n"
+					  				+ "9 - aktuelles turnier speichern\n"
+					  				+ "10 - turnier editieren\n"
 									+ "\n"
 					  				+ "0 - velassen\n"
 					  				+ "99 - Desktop\n";
@@ -38,14 +42,25 @@ public class TournamentIOInterface {
 				createNewTournament();
 				break;
 			case 5:
-				TeamIOInterface.teamIOMenue();
+				setActualTournament();
 				break;
 			case 6:
+				System.out.println(Import_export_datas.actualTournament);
+				break;
+			case 7:
+				TeamIOInterface.teamIOMenue();
+				break;
+			case 8:
 				PlayerIOInterface.playerIOMenue();
 				break;
+			case 9:
+				Import_export_datas.export_tournaments_to_file(Import_export_datas.actualTournament.getId());
+				break;
+			case 10:
+				Tournament.editTournament();
+				break;
 			case 99:
-				System.out.print("-->Desktop");
-				System.exit(0);
+				MainInterface.saveAndQuit();
 			case 0:
 				return;
 			}
@@ -55,11 +70,23 @@ public class TournamentIOInterface {
 		
 	}
 	
+	private static void setActualTournament() {
+		if (Import_export_datas.allTournaments.isEmpty()){
+			System.out.println("db leer");
+		} else {
+			int id = IOTools.readInt("turnier ID: ");
+			Import_export_datas.actualTournament = Import_export_datas.getTournamentByID(id);
+		}
+	}
+
 	public static void createNewTournament() {
 		System.out.println("turnier anlegen");
 		//import overview to get actual tournament id
-		System.out.println("import aktuelle turnierliste");
-		Import_export_datas.import_tournament_overview_from_file(false);
+		if(Import_export_datas.allTournaments.isEmpty()){
+			System.out.println("import aktuelle turnierliste");
+			Import_export_datas.importAllTournamentsFromOverview(false);
+		}
+		
 		
 		System.out.println("turnierdaten");
 		//set tournament id
@@ -97,6 +124,10 @@ public class TournamentIOInterface {
 		System.out.println(tAddName + " wird als aktuelles Turnier gesetzt.");
 		Import_export_datas.actualTournament = tAdd;
 		
+		/**
+		 * TODO
+		 */
+		System.out.println("todo: ");
 		//player
 		System.out.println("spielerdaten");
 		

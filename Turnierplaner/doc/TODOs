@@ -1,0 +1,20 @@
+tournament file
+	define header borders
+	
+	BEGIN HEAD
+	header data
+	header data
+	header data
+	header data
+	header data
+	....
+	END HEADER
+	BEGIN BODY
+	...
+	....
+	...
+	END BODY 
+	
+	at import scans line for key words to separate header from body
+	
+export actual tournament overview to file

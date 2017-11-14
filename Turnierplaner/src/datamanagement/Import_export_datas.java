@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.ArrayList;
 import Prog1Tools.IOTools;
@@ -24,14 +25,6 @@ public class Import_export_datas {
 	 */
 
 	private static String dbFilePlayer = "data\\player.txt";
-	/**
-	 * TODO
-	 * delete
-	 */
-	private static String dbFilePlayerTesting = "data\\player1.txt";
-	/**
-	 * 
-	 */
 	private static String dbFileTeam = "data\\team.txt";
 	private	static String dbFileTournamentOverview = "data\\tournamentOverview.txt";
 
@@ -79,6 +72,9 @@ public class Import_export_datas {
 					addP.setID(Integer.parseInt(fields[0]));
 					addP.setSurename(fields[1]);
 					allPlayers.add(addP);
+					
+					System.out.println("imported: " + addP);
+					
 					setId=addP.getPlayerId()+1;
 				}
 				Player.setNextId(setId);
@@ -125,9 +121,8 @@ public class Import_export_datas {
 					// create team (if possible)
 
 					Team addT = new Team(teamName,addPlayerList);
-					System.out.println(addT);
-					
 					allTeams.add(addT);
+					System.out.println("imported: " + addT);
 					setId=addT.getTeamId()+1;
 				}
 				Team.setNextId(setId);
@@ -137,11 +132,17 @@ public class Import_export_datas {
 
 	}
 
+	/**
+	 * 
+	 * @param userOKisNeeded true if user has to decide if to import or not
+	 */
 	@SuppressWarnings("deprecation")
-	public static void import_tournament_overview_from_file(boolean userOKisNeeded){
+public static void importAllTournamentsFromOverview(boolean userOKisNeeded){
 		/**
 		 * 3 files: player,teams,tournament
 		 */
+		boolean verboseIsOn = false;
+		
 		File databaseFile = new File(dbFileTournamentOverview);
 		if(databaseFile.exists()){
 			try(BufferedReader r = new BufferedReader(new FileReader(databaseFile))){
@@ -151,28 +152,29 @@ public class Import_export_datas {
 				//read following lines
 				while((line = r.readLine()) != null){
 					String[] splitLine = line.split(";");
-					//tournament id
-					int tourID = Integer.valueOf(splitLine[0]);
-					System.out.println("id: "+tourID);
 					//tournamentName
 					String tourName = splitLine[1];
-					System.out.println(" - name: "+tourName);
-					//date made
-					
-					/**
-					 * TODO
-					 * date format
-					 */
-					
-					System.out.print(" - date made: "+splitLine[2]);
-					java.sql.Date tourDate = new java.sql.Date(0);
-					
-					//date last edit
-					System.out.println(" - date last modified: "+splitLine[3]);
-					
 					//tournamentDBfile
 					String tournamentDBFileName = splitLine[4];
-					System.out.println(" - DB file: "+tournamentDBFileName);
+
+					if(verboseIsOn){
+						//tournament id
+						int tourID = Integer.valueOf(splitLine[0]);
+						//date made
+						/**
+						 * TODO
+						 * date format
+						 */
+						java.sql.Date tourDate = new java.sql.Date(0);
+						//date last edit
+						System.out.println(" - date last modified: "+splitLine[3]);
+						System.out.println(line);
+						System.out.println("id: "+tourID);
+						System.out.println(" - name: "+tourName);
+						System.out.print(" - date made: "+splitLine[2]);
+						System.out.println(" - DB file: "+tournamentDBFileName);	
+					}
+					
 					
 					if(userOKisNeeded){
 						if(IOTools.readInt("import " + tourName + "?")==1){
@@ -194,7 +196,96 @@ public class Import_export_datas {
 			}
 		}
 	}
+	
+	public static void importAllTournamentsFromOverview2_TEMP(boolean userOKisNeeded){
+		/**
+		 * 3 files: player,teams,tournament
+		 */
+		boolean verboseIsOn = false;
+		
+		File databaseFile = new File(dbFileTournamentOverview);
+		if(databaseFile.exists()){
+			try(BufferedReader r = new BufferedReader(new FileReader(databaseFile))){
+				String line;
+				//skip first line
+				r.readLine();
+				//read following lines
+				while((line = r.readLine()) != null){
+					String[] splitLine = line.split(";");
+					//tournamentName
+					String tourName = splitLine[1];
+					//tournamentDBfile
+					String tournamentDBFileName = splitLine[4];
 
+					if(verboseIsOn){
+						//tournament id
+						int tourID = Integer.valueOf(splitLine[0]);
+						//date made
+						/**
+						 * TODO
+						 * date format
+						 */
+						java.sql.Date tourDate = new java.sql.Date(0);
+						//date last edit
+						System.out.println(" - date last modified: "+splitLine[3]);
+						System.out.println(line);
+						System.out.println("id: "+tourID);
+						System.out.println(" - name: "+tourName);
+						System.out.print(" - date made: "+splitLine[2]);
+						System.out.println(" - DB file: "+tournamentDBFileName);	
+					}
+					
+					
+					if(userOKisNeeded){
+						if(IOTools.readInt("import " + tourName + "?")==1){
+							importTournament2allTournaments2(tournamentDBFileName);
+						}
+					}else{
+						importTournament2allTournaments2(tournamentDBFileName);
+					}
+					
+					
+					
+				}
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	
+	public static void exportTournamentOverview(){
+		if(Import_export_datas.allTournaments.isEmpty()){
+			System.out.println("datenbank leer...abruch");
+			return;
+		}
+//		String filename = "data//tournamentOverview.txt";
+		String filename = dbFileTournamentOverview;
+		Writer writer = null;
+		try {
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "utf-8"));
+			writer.write("id;tournamentName;date_made;date_last_edit;tournamentDBfile\n");
+			for (Tournament t : allTournaments) {
+				writer.write(t.getId() + ";" + t.getTournamentName() + ";" + t.getDateMade() + ";" + t.getDateLastMod() + ";" + t.getFilePathName() + "\n"); 
+			}
+			
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {writer.close();} catch (Exception ex) {/*ignore*/}
+		}
+	}
 	
 	/**
 	 * import one tournament to list of tournaments in ram
@@ -214,7 +305,7 @@ public class Import_export_datas {
 				//read following lines
 				int addTourID = 0;
 				long addTourDate_made = 0, addTourDate_l_e=0;
-				String addTourName = null;
+				String addTourName = null, addTourFileName = null, addTourLocation = null;
 				while((line = r.readLine()) != null){
 					if (line.contains("=")){
 						String[] splitLine = line.split("=");
@@ -231,6 +322,14 @@ public class Import_export_datas {
 						case "date_last_edit":
 							 addTourDate_l_e = Long.valueOf(splitLine[1]);
 							break;
+						case "location":
+							addTourLocation = splitLine[1];
+							break;
+						case "filePathName":
+							addTourFileName = splitLine[1];
+							break;
+//						case "":
+//							break;
 						default:
 							break;
 						}
@@ -242,6 +341,8 @@ public class Import_export_datas {
 				tourAdd.setTournamentName(addTourName);
 				tourAdd.setDateMade(addTourDate_made);
 				tourAdd.setDateLastMod(addTourDate_l_e);
+				tourAdd.setFilePathName(addTourFileName);
+				tourAdd.setLocation(addTourLocation);
 				
 				//add tourAdd to all tournaments
 				allTournaments.add(tourAdd);
@@ -262,6 +363,118 @@ public class Import_export_datas {
 		}
 	}
 	
+	public static void importTournament2allTournaments2(String filename){
+		String filePathName = "data//"+filename;
+
+		//		System.out.println(filePathName);
+
+		File databaseFile = new File(filePathName);
+		if(databaseFile.exists()){
+			try(BufferedReader r = new BufferedReader(new FileReader(databaseFile))){
+				String line;
+				int addTourID = 0;
+				long addTourDate_made = 0, addTourDate_l_e=0;
+				String addTourName = null, addTourFileName = null, addTourLocation = null;
+				boolean isInHeader = false, isInBody = false;
+
+				while((line = r.readLine()) != null){
+					if(line.equals("")){//skip empty lines
+						continue;
+					}
+//					System.out.print(line + " --> ");
+					if (isInHeader){//if line is in header
+						if(line.contains("HEADER END")){
+//							System.out.println("header end detected");
+							isInHeader = false;
+							continue;
+						}
+						//area for manage header content --------------------------------
+
+
+						if (line.contains("=")){
+							String[] splitLine = line.split("=");
+							switch (splitLine[0]) {
+							case "id":
+								addTourID = Integer.valueOf(splitLine[1]);
+								break;
+							case "tournament_name":
+								addTourName = splitLine[1];
+								break;
+							case "date_made":
+								addTourDate_made = Long.valueOf(splitLine[1]);
+								break;
+							case "date_last_edit":
+								addTourDate_l_e = Long.valueOf(splitLine[1]);
+								break;
+							case "location":
+								addTourLocation = splitLine[1];
+								break;
+							case "filePathName":
+								addTourFileName = splitLine[1];
+								break;
+								//case "":
+								//break;
+							default:
+								break;
+							}//switch
+						}//if line contain "="
+
+						//end of area for manage header content -------------------------
+					} else if(isInBody){
+						if(line.contains("BODY END")){
+//							System.out.println("body end detected");
+							isInBody = false;
+							continue;
+						}
+						//area for manage body content ----------------------------------
+
+//						System.out.println("body room");
+
+						//end of area for manage body content ---------------------------
+					} else if (line.contains("HEAD BEGIN")){
+						isInHeader = true;
+//						System.out.println("header begin detected");
+						continue;
+					} else if (line.contains("BODY BEGIN")){
+						isInBody = true;
+//						System.out.println("body begin detected");
+						continue;
+					} else {
+//						System.out.println("interstellar room *_*");
+						continue;
+					}
+				}//while read line
+				//adding tournament to db
+
+				Tournament tourAdd = new Tournament();
+				tourAdd.setId(addTourID);
+				tourAdd.setTournamentName(addTourName);
+				tourAdd.setDateMade(addTourDate_made);
+				tourAdd.setDateLastMod(addTourDate_l_e);
+				tourAdd.setFilePathName(addTourFileName);
+				tourAdd.setLocation(addTourLocation);
+
+				//add tourAdd to all tournaments
+				allTournaments.add(tourAdd);
+				//increase id counter in datatype 
+				Tournament.setNextID(tourAdd.getId()+1);
+				/**
+				 * TODO
+				 * delete verbose
+				 */
+				System.out.println("imported: "+tourAdd);
+
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+	}
+	
 	static public void export_players_to_file(){
 		writeToFile("player");
 	}
@@ -273,11 +486,114 @@ public class Import_export_datas {
 		 */
 	}
 
-	private void export_tournaments_to_file(){
+	public static void export_tournaments_to_file(int id){
 		/**
 		 * 3 files for players, teams and tournament
 		 * players and team files are connected to tournament file by name and links
 		 */
+		
+		boolean verboseIsOn = true;
+		
+		Tournament tournament2export = getTournamentByID(id);
+		String filename = "data//" + tournament2export.getFilePathName();
+		Writer writer = null;
+		try {
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "utf-8"));
+
+			//data header of tournament
+			writer.write(     "main info\n"
+							+ "-------------------------------\n"
+							+ "id=" + tournament2export.getId() + "\n"
+							+ "tournament_name=" + tournament2export.getTournamentName() + "\n"
+							+ "date_made=" + tournament2export.getDateMade() + "\n"
+							+ "date_last_edit=" + tournament2export.getDateLastMod() + "\n"
+							+ "filePathName=" + tournament2export.getFilePathName() + "\n"
+							+ "location=" + tournament2export.getLocation());
+			
+			
+			
+			
+			
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {writer.close();} catch (Exception ex) {/*ignore*/}
+		}
+
+		if(verboseIsOn){
+			System.out.println("exported: " + tournament2export);
+		}
+	
+		
+	}
+
+	public static void export_tournaments_to_file2(int id){
+		/**
+		 * 3 files for players, teams and tournament
+		 * players and team files are connected to tournament file by name and links
+		 */
+		
+		boolean verboseIsOn = true;
+		
+		Tournament tournament2export = getTournamentByID(id);
+		String filename = "data//" + tournament2export.getFilePathName();
+		Writer writer = null;
+		try {
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "utf-8"));
+
+			//data header of tournament
+			writer.write(     "HEAD BEGIN\n"
+							+ "id=" + tournament2export.getId() + "\n"
+							+ "tournament_name=" + tournament2export.getTournamentName() + "\n"
+							+ "date_made=" + tournament2export.getDateMade() + "\n"
+							+ "date_last_edit=" + tournament2export.getDateLastMod() + "\n"
+							+ "filePathName=" + tournament2export.getFilePathName() + "\n"
+							+ "location=" + tournament2export.getLocation() + "\n"
+							+ "HEADER END\n");
+			
+			//body of tournament - tournament table
+			writer.write(     "BODY BEGIN\n"
+							+ "\n"
+							+ "BODY END");
+			
+			
+			
+			
+			
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {writer.close();} catch (Exception ex) {/*ignore*/}
+		}
+
+		if(verboseIsOn){
+			System.out.println("exported: " + tournament2export);
+		}
+	
+		
+	}
+
+	public static Tournament getTournamentByID(int id) {
+		for (Tournament t : allTournaments) {
+			if (id == t.getId()){
+				return t;
+			}
+		}
+		return null;
 	}
 
 	private static void writeToFile(String whatToWrite){
@@ -290,12 +606,15 @@ public class Import_export_datas {
 			System.out.println("writing...");
 			break;
 		}
+		
 		String filename = "";//Initialize what to do variable
+		
 		switch (whatToWrite) {
 		case "player"://if player take player DB
-			filename = dbFilePlayerTesting; 
+			filename = dbFilePlayer; 
 			break;
 		}
+		
 		Writer writer = null;
 
 		try {
@@ -345,6 +664,22 @@ public class Import_export_datas {
 		} finally {
 			try {writer.close();} catch (Exception ex) {/*ignore*/}
 		}
+	}
+
+	public static void saveAllActualTournamentData() {
+		for (Tournament t : allTournaments) {
+			export_tournaments_to_file(t.getId());
+		}
+		exportTournamentOverview();
+		
+	}
+
+	public static void tournamentOldImportNewExport() {
+		importAllTournamentsFromOverview(false);
+		for (Tournament t : allTournaments) {
+			export_tournaments_to_file2(t.getId());
+		}	
+		
 	}
 
 

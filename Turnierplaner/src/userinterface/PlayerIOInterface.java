@@ -39,8 +39,7 @@ public class PlayerIOInterface {
 				TeamIOInterface.teamIOMenue();
 				break;
 			case 99:
-				System.out.print("-->Desktop");
-				System.exit(0);
+				MainInterface.saveAndQuit();
 			case 0:
 				return;
 			}

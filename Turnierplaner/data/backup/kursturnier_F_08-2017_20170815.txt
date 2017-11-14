@@ -4,6 +4,8 @@ id=0
 tournament_name=Kursturnier F 08-2017
 date_made=20170815
 date_last_edit=20171101
+location=berlin
+filePathName=kursturnier_F_08-2017_20170815
 
 tables
 -------------------------------
