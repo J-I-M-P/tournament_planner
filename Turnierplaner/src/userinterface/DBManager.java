@@ -10,7 +10,7 @@ import obsolet.DataIO;
 
 public class DBManager {
 	
-	public static void dbManagerMenue(){
+	public static void dbManagerIOMenue(){
 		while(true){
 			String playerDataMenue =  "-----DB Manager-------------------------------------------------------------------------------------------------\n"
 									+ "-----PlayerDB---------                      -----TeamDB---------                       -----TurnierDB----------        \n"
@@ -18,8 +18,8 @@ public class DBManager {
 					  				+ "01 - spielerdaten einlesen von Datenbank    06 - teamdaten einlesen von Datenbank      11 - Turnierdaten einlesen\n"
 									+ "02 - spieler anzeigen                       07 - team anzeigen                         12 - Turnierdaten anzeigen\n"
 					  				+ "03 - spieler DB auf Konsistenz prüfen       08 - team DB auf Konsistenz prüfen         13 - turnierübersicht exportieren\n"
-									+ "04 - spieler in datenbak schreiben          09 - team in datenbak schreiben            14 - turniere und übersicht speichern\n"
-					  				+ "05 - spieler in DB suchen                   10 - team in DB suchen                     15 - alt import - neu export\n"
+									+ "04 - spieler in datenbak schreiben          09 - teams in datenbak schreiben           14 - turniere und übersicht speichern\n"
+					  				+ "05 - spieler in DB suchen                   10 - team in DB suchen                     15 - \n"
 									+ "\n"
 					  				+ "0 - velassen\n"
 					  				+ "99 - Desktop\n";
@@ -67,6 +67,9 @@ public class DBManager {
 			case 8:
 				//team create
 				break;
+			case 9:
+				Import_export_datas.export_teams_to_file();
+				break;
 			case 11:
 				Import_export_datas.importAllTournamentsFromOverview(false);
 				break;
@@ -80,7 +83,6 @@ public class DBManager {
 				Import_export_datas.saveAllActualTournamentData();
 				break;
 			case 15:
-				Import_export_datas.tournamentOldImportNewExport();
 				break;
 			case 99:
 				MainInterface.saveAndQuit();

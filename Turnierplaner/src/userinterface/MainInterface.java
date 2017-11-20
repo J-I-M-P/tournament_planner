@@ -1,9 +1,13 @@
 package userinterface;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import Prog1Tools.IOTools;
 import datamanagement.Import_export_datas;
 import datatypes.Player;
+import datatypes.Team;
+import datatypes.TournamentMode;
+import datatypes.TournamentMode_KO;
 import obsolet.DataIO;
 import starter.StarterClass;
 
@@ -42,7 +46,7 @@ public class MainInterface {
 
 			switch (IOTools.readInt()) {
 			case 1://Import / Export - Datenbanken
-				DBManager.dbManagerMenue();
+				DBManager.dbManagerIOMenue();
 				break;
 			case 2://Turnierdaten anpassen
 				TournamentIOInterface.tournamentIOMenue();
@@ -57,9 +61,18 @@ public class MainInterface {
 				StarterClass.verboselevel = IOTools.readInt("verbose (1-3): "); 
 				break;
 			case 6:	
+
+				ArrayList<Team> in = new ArrayList<>();
+				for (Team team : Import_export_datas.allTeams) {
+					in.add(team);
+				}
+				TournamentMode_KO mode1 = new TournamentMode_KO(in);
+//				System.out.println(mode1);
+				mode1.generateModePlan();
+				
 //				Import_export_datas.importTournament2allTournaments2("rsd171109");
 //				Import_export_datas.importAllTournamentsFromOverview2_TEMP(false);
-				Import_export_datas.tournamentOldImportNewExport();
+//				Import_export_datas.tournamentOldImportNewExport();
 //				importtest();
 //				System.out.println(Import_export_datas.getTournamentByID(IOTools.readInt("id: ")));
 //				Import_export_datas.importTournament2allTournaments(IOTools.readString("filename: "));
@@ -72,27 +85,24 @@ public class MainInterface {
 	}
 
 	
+	
+	/**
+	 * TODO
+	 * implement save only when changes
+	 */
 	public static void saveAndQuit() {
+		
 		if (IOTools.readInt("save?")==1){
-			
+			Import_export_datas.export_players_to_file();
+			Import_export_datas.export_teams_to_file();
+			Import_export_datas.saveAllActualTournamentData();
 		}
 		System.out.print("-->Desktop");
 		System.exit(0);
 	}
 
 
-	/**
-	 * TODO
-	 * delete test method
-	 */
-	private static void importtest() {
-		String name = IOTools.readLine("neuer turniername: ");
-		if (name.equals("")){
-			System.out.println("leer");
-		}else {
-			System.out.println("inhalt");
-		}
-	}
+	
 
 
 	//---------------------data base management--------------------------------------------------------------------------------------------

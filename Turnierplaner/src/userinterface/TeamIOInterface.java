@@ -61,14 +61,20 @@ public class TeamIOInterface {
 		 */
 		if(Import_export_datas.allTeams.isEmpty()){
 			//System.out.println("leer");
-			Import_export_datas.import_players_from_file();
+			if(Import_export_datas.allPlayers.isEmpty()){
+				Import_export_datas.import_players_from_file();
+			}
+			Import_export_datas.import_teams_from_file();
 		}
-		System.out.println("Neuen Spieler anlegen:");
-		String firstname 	= IOTools.readLine("Vorname:");
-		String surename 	= IOTools.readLine("Nachname:");
-		Player addP = new Player(firstname);
-		addP.setSurename(surename);
-		Import_export_datas.allPlayers.add(addP);
+		System.out.println("Neues Team anlegen:");
+		String teamName 	= IOTools.readLine("Team Name:");
+//		String teamTeams 	= IOTools.readLine("Teams (x,x,x,x,x:");
+		Team addT = new Team(teamName);
+//		String[] teamSplit = teamTeams.split(",");
+		/**
+		 * TODO add players 2 teams
+		 */
+		Import_export_datas.allTeams.add(addT);
 	}
 	
 	public static int removeTeamDialogue(){

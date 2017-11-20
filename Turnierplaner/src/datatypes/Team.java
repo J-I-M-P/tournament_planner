@@ -118,9 +118,14 @@ public class Team {
 	@Override
 	public String toString() {
 		String playersInTeamString ="";
-		for (Player p : playersInTeam) {
-			playersInTeamString += p.toString();
+		if((playersInTeam == null) || playersInTeam.isEmpty()){
+			
+		}else {
+			for (Player p : playersInTeam) {
+				playersInTeamString += p.toString();
+			}
 		}
+		
 		return "Team [ID: " + teamId + " - " + teamName + " - " + playersInTeamString + "]";
 	}
 	
