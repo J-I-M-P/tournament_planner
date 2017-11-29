@@ -63,12 +63,16 @@ public class MainInterface {
 			case 6:	
 
 				ArrayList<Team> in = new ArrayList<>();
-				for (Team team : Import_export_datas.allTeams) {
-					in.add(team);
-				}
+				in.addAll(Import_export_datas.allTeams);
 				TournamentMode_KO mode1 = new TournamentMode_KO(in);
 //				System.out.println(mode1);
 				mode1.generateModePlan();
+				
+				
+				/**
+				 * move this method to obsolet
+				 */
+//				TournamentMode_KO.teamAmounts2games();
 				
 //				Import_export_datas.importTournament2allTournaments2("rsd171109");
 //				Import_export_datas.importAllTournamentsFromOverview2_TEMP(false);

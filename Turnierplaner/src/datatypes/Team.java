@@ -2,6 +2,7 @@ package datatypes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 import datamanagement.Import_export_datas;
 
@@ -110,7 +111,13 @@ public class Team {
 		this.teamId=teamID;
 	}
 
-
+	/**
+	 * TODO
+	 * complete and use
+	 */
+	public void generateRandomTeam(){
+		
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
@@ -128,10 +135,4 @@ public class Team {
 		
 		return "Team [ID: " + teamId + " - " + teamName + " - " + playersInTeamString + "]";
 	}
-	
-	
-	
-	
-	
-
 }
