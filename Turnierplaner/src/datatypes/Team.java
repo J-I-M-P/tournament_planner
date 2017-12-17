@@ -11,6 +11,7 @@ public class Team {
 	private int teamId;
 	private String teamName;
 	private ArrayList<Player> playersInTeam = new ArrayList<>();
+	private boolean isWILDCARD = false;
 
 	static int nextID = 0;
 
@@ -22,7 +23,7 @@ public class Team {
 	 * standard constructor
 	 */
 	public Team() {
-		System.out.println("team:standardconstructor");
+//		System.out.println("team:standardconstructor");
 //		this.teamId = 0;
 //		this.teamName = null;
 //		this.playersInTeam = null;
@@ -39,10 +40,12 @@ public class Team {
 	}
 	
 	public Team (String teamName){
-		System.out.println("created team by name");
-		System.out.println("team name: "+teamName);
+//		System.out.println("created team by name");
+//		System.out.println("team name: "+teamName);
 		this.teamName = teamName;
-		
+		if(teamName.equals("WILDCARD")){
+			this.isWILDCARD = true;
+		}
 		this.playersInTeam = null;
 		this.teamId = nextID++;
 //		this(teamName, null);
@@ -53,8 +56,22 @@ public class Team {
 	
 
 	
+	
 
 
+	/**
+	 * @return the isWILDCARD
+	 */
+	public boolean isWILDCARD() {
+		return isWILDCARD;
+	}
+
+	/**
+	 * @param isWILDCARD the isWILDCARD to set
+	 */
+	public void setWILDCARD(boolean isWILDCARD) {
+		this.isWILDCARD = isWILDCARD;
+	}
 
 	/**
 	 * @return the playersInTeam

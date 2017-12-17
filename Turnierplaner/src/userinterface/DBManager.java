@@ -106,4 +106,22 @@ public class DBManager {
 		
 	}
 	
+	public static Player getPlayerByID(int id){
+		for (Player p : Import_export_datas.allPlayers) {
+			if(p.getPlayerId() == id){
+				return p;
+			}
+		}
+		return null;
+	}
+	
+	public static Team getTeamByID(int id){
+		for (Team t : Import_export_datas.allTeams) {
+			if(t.getTeamId() == id){
+				return t;
+			}
+		}
+		return null;
+	}
+	
 }

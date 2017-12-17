@@ -8,6 +8,7 @@ import datatypes.Player;
 import datatypes.Team;
 import datatypes.TournamentMode;
 import datatypes.TournamentMode_KO;
+import datatypes.Mode_Table;
 import obsolet.DataIO;
 import starter.StarterClass;
 
@@ -38,7 +39,9 @@ public class MainInterface {
 							  + "4 - Teamdaten anpassen\n"
 							  + "5 - set verbose\n"
 							  + "6 - test\n"
-							  + "0 - verlassen";
+							  + "7 - test2\n"
+							  + "0 - verlassen\n"
+							  + "99 - exit w/o save\n";
 
 		while(true){
 
@@ -64,9 +67,20 @@ public class MainInterface {
 
 				ArrayList<Team> in = new ArrayList<>();
 				in.addAll(Import_export_datas.allTeams);
-				TournamentMode_KO mode1 = new TournamentMode_KO(in);
+//				in.addAll(Import_export_datas.allTeams);
+				TournamentMode_KO tourMode1_KO = new TournamentMode_KO(in);
 //				System.out.println(mode1);
-				mode1.generateModePlan();
+				/**
+				 * wishlist
+				 * --------
+				 * 
+				 * look in TournamentMode_KO
+				 */
+				
+				tourMode1_KO.prepare();
+				
+				
+				
 				
 				
 				/**
@@ -81,9 +95,40 @@ public class MainInterface {
 //				System.out.println(Import_export_datas.getTournamentByID(IOTools.readInt("id: ")));
 //				Import_export_datas.importTournament2allTournaments(IOTools.readString("filename: "));
 				break;
+			case 7:
+//				int randomI;
+//				double randomD;
+//				randomD = Math.random();
+//				System.out.println(randomD);
+				
+				
+				
+				Mode_Table table1 = new Mode_Table(0);
+				
+//				table1.test();
+				
+				table1.addTeam(0);
+				table1.addTeam(1);
+				table1.addTeam(2);
+				table1.addTeam(3);
+				table1.addTeam(4);
+				System.out.println("unsortiert");
+				table1.printTable();
+				System.out.println("nach name");
+				table1.sortBy("byName");
+				table1.printTable();
+				System.out.println("nach kleinen punkten");
+				table1.sortBy("byLittlePoints");
+				table1.printTable();
+				
+				break;
 			case 0:
-				saveAndQuit();	
+				saveAndQuit();
 				return;
+			case 99:
+				quitWOSave();
+				break;
+				
 			}
 		}
 	}
@@ -101,6 +146,11 @@ public class MainInterface {
 			Import_export_datas.export_teams_to_file();
 			Import_export_datas.saveAllActualTournamentData();
 		}
+		System.out.print("-->Desktop");
+		System.exit(0);
+	}
+	
+	public static void quitWOSave(){
 		System.out.print("-->Desktop");
 		System.exit(0);
 	}

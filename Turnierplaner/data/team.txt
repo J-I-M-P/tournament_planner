@@ -11,3 +11,5 @@ TeamID;Teamname;Player-IDs
 9;immer wieder
 10;imPoSand
 11;Kies Im Arsch
+12;die 13ten krieger
+13;re_steht_in_potsdam

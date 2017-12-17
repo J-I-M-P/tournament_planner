@@ -6,18 +6,24 @@ package datatypes;
  *
  */
 
-import java.util.ArrayList;
-
 import datamanagement.Import_export_datas;
-import userinterface.DBManager;
-import userinterface.TournamentIOInterface;
 
+
+/**
+ * master table
+ * children
+ * 	- 	tournament-table
+ * 	-	mode-table
+ * 	-	
+ * @author JIMP
+ *
+ */
 public class Table {
 	int tournamentID;
 	Tournament tournamentOnTable;
 	
-	public Table(int id){
-		this.tournamentID = id;
+	public Table(int tournamentId){
+		this.tournamentID = tournamentId;
 		tournamentOnTable = Import_export_datas.getTournamentByID(tournamentID);
 	}
 	
@@ -27,7 +33,7 @@ public class Table {
 	 */
 	@Override
 	public String toString() {
-		return "Table";
+		return "MOA-Table";
 	}
 	
 	

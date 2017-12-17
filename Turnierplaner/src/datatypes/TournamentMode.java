@@ -47,4 +47,21 @@ public class TournamentMode {
 //		System.out.println("input teams: " + inputTeams);
 //		System.out.println("output teams: " + outputTeams);
 	}
+	
+	/**
+	 * for every mode the same --> generating table has to has the same output
+	 * shows round table
+	 * filter table
+	 */
+	protected void showTable() {
+		
+	}
+	
+	
+	/**
+	 * use matchmatrix to generate table
+	 */
+	protected void generateTable() {
+		
+	}
 }

@@ -102,6 +102,11 @@ public class PlayerIOInterface {
 		return 0;
 	}
 	
+	/**
+	 * move completely to DBManager
+	 * @param id
+	 * @return
+	 */
 	public static Player getPlayerByID(int id){
 		for (Player p : Import_export_datas.allPlayers) {
 			if(p.getPlayerId() == id){

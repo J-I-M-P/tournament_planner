@@ -1,9 +1,13 @@
 package datatypes;
 
+import java.text.Format;
+
+import Prog1Tools.IOTools;
+
 public class Match {
 	
 	public enum result{
-		WIN_A, DRAW, WIN_B
+		WIN_A, DRAWN, WIN_B
 	}
 	
 	private long matchID;
@@ -11,15 +15,29 @@ public class Match {
 	private Team winner, looser;
 	private int field;
 	private int pointsTeamA, pointsTeamB;
+	private String score;
 	private result matchResult;
 	
+	private int internalID;
+	private static int nextInternalID; 
+	
 	public Match(){
-		
+		this.internalID = nextInternalID++;
 	}
 	
 	public Match(Team teamA, Team teamB){
 		this.teamA = teamA;
 		this.teamB = teamB;
+		this.internalID = nextInternalID++;
+	}
+	
+	
+
+	/**
+	 * @return the internalID
+	 */
+	public int getInternalID() {
+		return internalID;
 	}
 
 	/**
@@ -141,15 +159,79 @@ public class Match {
 		return matchResult;
 	}
 	
+	
+	
 	/**
-	 * generates winner, looser, result, 
+	 * @return the score
 	 */
-	public void progress(){
-		if(teamA == null | teamB == null){
-			System.out.println("unzureichende eingaben - keine berechnung möglich");
+	public String getScore() {
+		return score;
+	}
+
+	
+	
+	/**
+	 * TODO maybe create a function to randomly fill the match results
+	 */
+	/**
+	 *
+	 * generates winner, looser, result, 
+	 *
+	 * 
+	 * @param mode 1-by score / 2-random mode / 3-by lottery 
+	 */
+	public void progress(int mode){
+		
+		if(teamA == null || teamB == null){
+			System.out.println("match/progress()/unzureichende eingaben - keine berechnung möglich - teamA oder teamB = null");
+			if(teamA == null){
+				System.out.println("teamA == null");
+			}
+			if (teamB == null){
+				System.out.println("teamB == null");
+			}
 			return;
 		}
-		matchResult = pointsTeamA>pointsTeamB?result.WIN_A:(pointsTeamA<pointsTeamB?result.WIN_B:result.DRAW);
+		
+		
+		//determine result - depending on mode
+		switch (mode) {
+		case 1:  //by points
+			if (pointsTeamA == pointsTeamB){
+				/**
+				 * TODO maybe ask user / at beginning in tournament options
+				 */
+				this.progress(2);
+			}else {
+				//if no ko
+//				matchResult = pointsTeamA>pointsTeamB?result.WIN_A:(pointsTeamA<pointsTeamB?result.WIN_B:result.DRAWN);
+				matchResult = pointsTeamA>pointsTeamB?result.WIN_A:result.WIN_B;
+			}
+			
+			break;
+		case 2: //random - no drawn
+			if(Math.random() < 0.5){
+				matchResult = result.WIN_A;
+			} else {
+				matchResult = result.WIN_B;
+			}
+			break;
+		case 3:
+			char in = IOTools.readChar(this + " - Gewinner (a/b)?_\n");
+			matchResult = in =='a'?result.WIN_A:result.WIN_B;
+			break;
+		default:
+			break;
+		}
+		
+		//when WILDCARDs are present
+		if(teamA.isWILDCARD()){
+			matchResult=result.WIN_B;
+		}else if (teamB.isWILDCARD()){
+			matchResult=result.WIN_A;
+		}
+		
+		//set winner and looser team
 		switch (matchResult) {
 		case WIN_A:
 			winner = teamA;
@@ -159,12 +241,21 @@ public class Match {
 			winner = teamB;
 			looser = teamA;
 			break;
-		case DRAW:
-			
+		case DRAWN:
+			//K.O. ==> no draw!
 			break;
 		default:
 			break;
 		}
+		
+		//determine score
+		score = String.format("(%02d - %02d)", this.pointsTeamA,this.pointsTeamB);
+	
+		
+	}
+	
+	public void progress(){
+		this.progress(1);	
 	}
 
 	/* (non-Javadoc)
@@ -173,19 +264,7 @@ public class Match {
 	@Override
 	public String toString() {
 		//generate String
-		String out = "Match[ID=" + matchID + "-";
-		if (teamA != null){
-			out += teamA.getTeamName(); 
-		}else{
-			out += "NN";
-		}
-		out += "<>";
-		if (teamB != null){
-			out += teamB.getTeamName(); 
-		}else{
-			out += "NN";
-		}
-		out += "]";
+		String out = String.format("%03d(%03d) %s[%15s]A %s B[%-20s]\n", this.matchID,this.internalID,this.matchResult,this.teamA.getTeamName(),this.score,this.teamB.getTeamName());
 		return  out;
 	}
 	
