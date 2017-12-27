@@ -1,7 +1,5 @@
 package userinterface;
 
-import java.nio.channels.ShutdownChannelGroupException;
-
 import Prog1Tools.IOTools;
 import datamanagement.Import_export_datas;
 import datatypes.Player;
@@ -39,8 +37,7 @@ public class PlayerIOInterface {
 				TeamIOInterface.teamIOMenue();
 				break;
 			case 99:
-				System.out.print("-->Desktop");
-				System.exit(0);
+				MainInterface.saveAndQuit();
 			case 0:
 				return;
 			}
@@ -75,11 +72,6 @@ public class PlayerIOInterface {
 		
 	}
 	
-	private static int playerRemoveFunction(){
-		return 0;
-		
-	}
-	
 	public static void showAllPlayers(){
 		if(Import_export_datas.allPlayers.isEmpty()){
 			if(IOTools.readChar("keine Daten importiert. importieren? (j/n): ") == 'j'){
@@ -103,6 +95,11 @@ public class PlayerIOInterface {
 		return 0;
 	}
 	
+	/**
+	 * move completely to DBManager
+	 * @param id
+	 * @return
+	 */
 	public static Player getPlayerByID(int id){
 		for (Player p : Import_export_datas.allPlayers) {
 			if(p.getPlayerId() == id){

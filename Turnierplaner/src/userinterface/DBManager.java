@@ -1,24 +1,21 @@
 package userinterface;
 
-import javax.swing.plaf.synth.SynthSpinnerUI;
-
 import Prog1Tools.IOTools;
 import datamanagement.Import_export_datas;
 import datatypes.Player;
 import datatypes.Team;
-import obsolet.DataIO;
 
 public class DBManager {
 	
-	public static void dbManagerMenue(){
+	public static void dbManagerIOMenue(){
 		while(true){
 			String playerDataMenue =  "-----DB Manager-------------------------------------------------------------------------------------------------\n"
 									+ "-----PlayerDB---------                      -----TeamDB---------                       -----TurnierDB----------        \n"
 									+ "\n"
 					  				+ "01 - spielerdaten einlesen von Datenbank    06 - teamdaten einlesen von Datenbank      11 - Turnierdaten einlesen\n"
 									+ "02 - spieler anzeigen                       07 - team anzeigen                         12 - Turnierdaten anzeigen\n"
-					  				+ "03 - spieler DB auf Konsistenz prüfen       08 - team DB auf Konsistenz prüfen         13 - \n"
-									+ "04 - spieler in datenbak schreiben          09 - team in datenbak schreiben            14 - \n"
+					  				+ "03 - spieler DB auf Konsistenz prüfen       08 - team DB auf Konsistenz prüfen         13 - turnierübersicht exportieren\n"
+									+ "04 - spieler in datenbak schreiben          09 - teams in datenbak schreiben           14 - turniere und übersicht speichern\n"
 					  				+ "05 - spieler in DB suchen                   10 - team in DB suchen                     15 - \n"
 									+ "\n"
 					  				+ "0 - velassen\n"
@@ -67,15 +64,25 @@ public class DBManager {
 			case 8:
 				//team create
 				break;
+			case 9:
+				Import_export_datas.export_teams_to_file();
+				break;
 			case 11:
-				Import_export_datas.import_tournament_overview_from_file(true);
+				Import_export_datas.importAllTournamentsFromOverview(false);
 				break;
 			case 12:
 				TournamentIOInterface.showAllTournaments();
 				break;
+			case 13:
+				Import_export_datas.exportTournamentOverview();
+				break;
+			case 14:
+				Import_export_datas.saveAllActualTournamentData();
+				break;
+			case 15:
+				break;
 			case 99:
-				System.out.print("-->Desktop");
-				System.exit(0);
+				MainInterface.saveAndQuit();
 			case 0:
 				return;
 			}
@@ -92,8 +99,27 @@ public class DBManager {
 	 * all players have right amount of data
 	 * if not  maybe fix this automatically
 	 */
+	@SuppressWarnings("unused")
 	private void checkDataBaseIntegrity(){
 		
+	}
+	
+	public static Player getPlayerByID(int id){
+		for (Player p : Import_export_datas.allPlayers) {
+			if(p.getPlayerId() == id){
+				return p;
+			}
+		}
+		return null;
+	}
+	
+	public static Team getTeamByID(int id){
+		for (Team t : Import_export_datas.allTeams) {
+			if(t.getTeamId() == id){
+				return t;
+			}
+		}
+		return null;
 	}
 	
 }

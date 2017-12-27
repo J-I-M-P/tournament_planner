@@ -1,13 +1,19 @@
 package datatypes;
 
 import java.util.Arrays;
+import java.util.GregorianCalendar;
+
+import Prog1Tools.IOTools;
+import datamanagement.Import_export_datas;
+import userinterface.TournamentIOInterface;
 
 public class Tournament {
 	
 	private int id;
 	private static int nextID = 0;
 	private String tournamentName, location, filePathName;
-	private long dateMade, dateLastMod, startTime;
+	private long dateMade, dateLastMod;
+	private GregorianCalendar timeStampMade, timeStampLastModified;
 	private Team[] teams;
 	
 	public Tournament(){
@@ -16,6 +22,7 @@ public class Tournament {
 	
 	public Tournament(String name){
 		this.tournamentName = name;
+		this.timeStampMade = new GregorianCalendar();
 	}
 	
 	
@@ -111,6 +118,13 @@ public class Tournament {
 	
 
 	/**
+	 * @return the timeStampMade
+	 */
+	public GregorianCalendar getTimeStampMade() {
+		return timeStampMade;
+	}
+
+	/**
 	 * @return the location
 	 */
 	public String getLocation() {
@@ -138,16 +152,60 @@ public class Tournament {
 		this.teams = teams;
 	}
 
+
+
+	public static void editTournament() {
+		System.out.println("turnier editieren");
+		System.out.println("-----------------");
+		TournamentIOInterface.showAllTournaments();
+		Tournament editT = Import_export_datas.getTournamentByID(IOTools.readInt("id: "));
+
+		String filename = IOTools.readLine("filename (" + editT.getFilePathName() + "): ");
+		if (filename.equals("")){
+			editT.setFilePathName(editT.getFilePathName());
+		}else{
+			editT.setFilePathName(filename);
+		}
+		System.out.println("set filename to: " + editT.getFilePathName());
+		
+		
+		editT.setTournamentName(IOTools.readString("name (" + editT.getTournamentName() + "): "));
+		
+		editT.setLocation(IOTools.readString("location (" + editT.getLocation() + "): "));
+		
+		editT.setDateMade(IOTools.readLong("date made (" + editT.getDateMade() + "): "));
+		/**
+		 * TODO
+		 * later automatically
+		 */
+		editT.setDateLastMod(IOTools.readLong("date last mod (" + editT.getDateLastMod() + "): "));
+		
+		/**
+		 * TODO
+		 * teams
+		 */
+//		private Team[] teams;
+		
+		
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Tournament [id=" + id + ", tournamentName=" + tournamentName + ", location=" + location + ", dateMade="
-				+ dateMade + ", dateLastMod=" + dateLastMod + ", teams=" + Arrays.toString(teams) + "]";
+		return "Tournament [id=" + id + ", tournamentName=" + tournamentName + ", location=" + location
+				+ ", filePathName=" + filePathName + ", dateMade=" + dateMade + ", dateLastMod=" + dateLastMod
+				+ ", teams=" + Arrays.toString(teams) + "]";
 	}
-
 	
+	
+
+//	Time 
+	
+//	SimpleDateFormat formatter = new SimpleDateFormat ("dd.MM.yyyy, HH:mm:ss ");
+//	Date currentTime = new Date();
+//	out.println("Zeit und Datum : " + formatter.format(currentTime));
 	
 	
 

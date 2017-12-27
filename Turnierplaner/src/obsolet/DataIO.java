@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import Prog1Tools.IOTools;
 import datatypes.Player;
-import userinterface.ClientInterface;
+//import userinterface.ClientInterface;
 
 public class DataIO {
 	
@@ -62,29 +62,29 @@ public class DataIO {
 	}
 	
 	public static void writeToFile(String whatToWrite){
-		String filename = "";
-		switch (whatToWrite) {
-		case "player":
-			filename = ClientInterface.getDbFilePlayer(); 
-			break;
-		}
-		Writer writer = null;
-
-		try {
-			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "utf-8"));
-			switch (whatToWrite) {
-			case "player":
-				for (Player player : allPlayers) {
-					writer.write(player.getPlayerId() + ";" + player.getSurename() + ";" + player.getFirstName() + "\n");
-				}
-				break;
-			}
-//			writer.write("Something");
-		} catch (IOException ex) {
-			// report
-		} finally {
-			try {writer.close();} catch (Exception ex) {/*ignore*/}
-		}
+//		String filename = "";
+//		switch (whatToWrite) {
+//		case "player":
+//			filename = ClientInterface.getDbFilePlayer(); 
+//			break;
+//		}
+//		Writer writer = null;
+//
+//		try {
+//			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "utf-8"));
+//			switch (whatToWrite) {
+//			case "player":
+//				for (Player player : allPlayers) {
+//					writer.write(player.getPlayerId() + ";" + player.getSurename() + ";" + player.getFirstName() + "\n");
+//				}
+//				break;
+//			}
+////			writer.write("Something");
+//		} catch (IOException ex) {
+//			// report
+//		} finally {
+//			try {writer.close();} catch (Exception ex) {/*ignore*/}
+//		}
 	}
 
 }

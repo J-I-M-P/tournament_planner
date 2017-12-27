@@ -1,4 +1,4 @@
-ID;Nachname;Vorname;Alter;Geschlecht;Handicap;Adresse;Telefon
+ID;surename;forename;;;;;;
 0;Daniel;Jens
 1;Zimmermann;Xenia
 2;Hoffmann;Frank

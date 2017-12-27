@@ -1,4 +1,15 @@
-TeamID;Teamname;Player1-ID;Player2-ID
+TeamID;Teamname;Player-IDs
 0;theTeam;1;2
 1;grabber;4;7;4
 2;buddler;2;3;5;1
+3;ali baba
+4;die juetn
+5;the team2
+6;frudels
+7;kilers
+8;die sandigen
+9;immer wieder
+10;imPoSand
+11;Kies Im Arsch
+12;die 13ten krieger
+13;re_steht_in_potsdam

@@ -1,15 +1,15 @@
 package datatypes;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-
 import datamanagement.Import_export_datas;
+import datamanagement.config;
 
 public class Team {
 	
 	private int teamId;
 	private String teamName;
 	private ArrayList<Player> playersInTeam = new ArrayList<>();
+	private boolean isWILDCARD = false;
 
 	static int nextID = 0;
 
@@ -21,7 +21,7 @@ public class Team {
 	 * standard constructor
 	 */
 	public Team() {
-		System.out.println("team:standardconstructor");
+//		System.out.println("team:standardconstructor");
 //		this.teamId = 0;
 //		this.teamName = null;
 //		this.playersInTeam = null;
@@ -32,16 +32,26 @@ public class Team {
 	 * @param addPlayersInConstrucor
 	 */
 	public Team(String teamName, ArrayList<Player> addPlayersInConstrucor) {
+		if(teamName.length() > config.teamNameLength){
+			System.err.println("team name zu lang");
+			return;
+		}
 		this.teamName = teamName;
 		this.playersInTeam.addAll(addPlayersInConstrucor);
 		this.teamId = nextID++;
 	}
 	
 	public Team (String teamName){
-		System.out.println("created team by name");
-		System.out.println("team name: "+teamName);
+		if(teamName.length() > config.teamNameLength){
+			System.err.println("team name zu lang");
+			return;
+		}
+//		System.out.println("created team by name");
+//		System.out.println("team name: "+teamName);
 		this.teamName = teamName;
-		
+		if(teamName.equals("WILDCARD")){
+			this.isWILDCARD = true;
+		}
 		this.playersInTeam = null;
 		this.teamId = nextID++;
 //		this(teamName, null);
@@ -52,8 +62,22 @@ public class Team {
 	
 
 	
+	
 
 
+	/**
+	 * @return the isWILDCARD
+	 */
+	public boolean isWILDCARD() {
+		return isWILDCARD;
+	}
+
+	/**
+	 * @param isWILDCARD the isWILDCARD to set
+	 */
+	public void setWILDCARD(boolean isWILDCARD) {
+		this.isWILDCARD = isWILDCARD;
+	}
 
 	/**
 	 * @return the playersInTeam
@@ -101,6 +125,10 @@ public class Team {
 	 * @param teamName the teamName to set
 	 */
 	public void setTeamName(String teamName) {
+		if(teamName.length() > config.teamNameLength){
+			System.err.println("team name zu lang");
+			return;
+		}
 		this.teamName = teamName;
 	}
 
@@ -110,7 +138,13 @@ public class Team {
 		this.teamId=teamID;
 	}
 
-
+	/**
+	 * TODO
+	 * complete and use
+	 */
+	public void generateRandomTeam(){
+		
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
@@ -118,15 +152,14 @@ public class Team {
 	@Override
 	public String toString() {
 		String playersInTeamString ="";
-		for (Player p : playersInTeam) {
-			playersInTeamString += p.toString();
+		if((playersInTeam == null) || playersInTeam.isEmpty()){
+			
+		}else {
+			for (Player p : playersInTeam) {
+				playersInTeamString += p.toString();
+			}
 		}
+		
 		return "Team [ID: " + teamId + " - " + teamName + " - " + playersInTeamString + "]";
 	}
-	
-	
-	
-	
-	
-
 }
