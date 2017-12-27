@@ -1,10 +1,8 @@
 package datatypes;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
-
 import datamanagement.Import_export_datas;
+import datamanagement.config;
 
 public class Team {
 	
@@ -34,12 +32,20 @@ public class Team {
 	 * @param addPlayersInConstrucor
 	 */
 	public Team(String teamName, ArrayList<Player> addPlayersInConstrucor) {
+		if(teamName.length() > config.teamNameLength){
+			System.err.println("team name zu lang");
+			return;
+		}
 		this.teamName = teamName;
 		this.playersInTeam.addAll(addPlayersInConstrucor);
 		this.teamId = nextID++;
 	}
 	
 	public Team (String teamName){
+		if(teamName.length() > config.teamNameLength){
+			System.err.println("team name zu lang");
+			return;
+		}
 //		System.out.println("created team by name");
 //		System.out.println("team name: "+teamName);
 		this.teamName = teamName;
@@ -119,6 +125,10 @@ public class Team {
 	 * @param teamName the teamName to set
 	 */
 	public void setTeamName(String teamName) {
+		if(teamName.length() > config.teamNameLength){
+			System.err.println("team name zu lang");
+			return;
+		}
 		this.teamName = teamName;
 	}
 

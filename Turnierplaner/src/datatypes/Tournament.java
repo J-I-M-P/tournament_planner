@@ -1,8 +1,7 @@
 package datatypes;
 
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.GregorianCalendar;
 
 import Prog1Tools.IOTools;
 import datamanagement.Import_export_datas;
@@ -14,6 +13,7 @@ public class Tournament {
 	private static int nextID = 0;
 	private String tournamentName, location, filePathName;
 	private long dateMade, dateLastMod;
+	private GregorianCalendar timeStampMade, timeStampLastModified;
 	private Team[] teams;
 	
 	public Tournament(){
@@ -22,6 +22,7 @@ public class Tournament {
 	
 	public Tournament(String name){
 		this.tournamentName = name;
+		this.timeStampMade = new GregorianCalendar();
 	}
 	
 	
@@ -115,6 +116,13 @@ public class Tournament {
 	}
 	
 	
+
+	/**
+	 * @return the timeStampMade
+	 */
+	public GregorianCalendar getTimeStampMade() {
+		return timeStampMade;
+	}
 
 	/**
 	 * @return the location

@@ -1,11 +1,10 @@
 package datatypes;
 
 import java.util.ArrayList;
-
-import javax.rmi.ssl.SslRMIClientSocketFactory;
-
 import Prog1Tools.IOTools;
+import datamanagement.Import_export_datas;
 import userinterface.MainInterface;
+import userinterface.ModeTableIOInterface;
 
 
 /**
@@ -53,12 +52,20 @@ import userinterface.MainInterface;
  */
 public class TournamentMode_KO extends TournamentMode {
 
-		//super class variables
+//super class variables
 		//input list before mode = old table
 		//ArrayList<Team> inputTeams = new ArrayList<>();
 		
 		//output list after mode = new table
 		//ArrayList<Team> outputTeams = new ArrayList<>();
+	
+		//mode specs
+		//int modeID;
+		
+		//mode calculations
+		//Table modeTable;
+	
+//----------------------------------------------------------------	
 		
 	/*
 	 * mode specs
@@ -75,7 +82,7 @@ public class TournamentMode_KO extends TournamentMode {
 	ArrayList<Team> secondHalf = new ArrayList<>();
 	ArrayList<Team> firstRoundInputTeams = new ArrayList<>();
 	Match[][] matchMatrix;
-//	Mode_Table 
+	Tournament tournament_of_this_table;
 	int teamsInFirstRound;
 	int amountOfMatchesInFirstRound;
 	int amountOfMatchesInActualRound;
@@ -86,14 +93,33 @@ public class TournamentMode_KO extends TournamentMode {
 	/**
 	 * standard constructor
 	 */
-	public TournamentMode_KO(){
-		System.out.println("new tournament mode ko - constructor");
+	public TournamentMode_KO(int tournamentID){
+		super(tournamentID);
+		System.out.println("new tournament mode ko - standard constructor");
 	}
 	
-	public TournamentMode_KO(ArrayList<Team> inputTeams){
+	public TournamentMode_KO(ArrayList<Team> inputTeams, int tournamentID){
+		super(tournamentID);
 		this.inputTeams = inputTeams;
-		
+		//copy teams to teamsInTournament
+		ArrayList<Team> teamsInTour = new ArrayList<>();
+		teamsInTour = inputTeams;
+		this.teamsInTournament = teamsInTour;
+		//
+		boolean tournamentSearchSuccesFalse = true;
+		for (Tournament t : Import_export_datas.allTournaments) {
+			if(t.getId() == tournamentID){
+				tournament_of_this_table = t;
+				modeTable = new Mode_Table(t.getId());
+				tournamentSearchSuccesFalse = false;
+			}
+		}
+		if(tournamentSearchSuccesFalse){
+			System.err.println("tournament_ko constructor: found no such tournament");
+		}
 	}
+	
+	
 	
 	public ArrayList<Team> returnTeamList(){
 		return this.outputTeams;
@@ -110,18 +136,20 @@ public class TournamentMode_KO extends TournamentMode {
 	 * 					- etc
 	 */
 	public void prepare(){  //(teamlist/table)
+		System.out.println("date made: " + tournament_of_this_table.getTimeStampMade());
 		//generateModePlan
-		this.generateModePlan();
+		generateModePlan();
 		System.out.println("prepared mode plan");
 		//generateRounds
-		this.generateRounds();
+		generateRounds();
 		System.out.println("prepared rounds");
 		// 		- generateModeInfos4Teams
 		
 		// 				- lists where to play when vs. whom
 		// 					- time table
 		// 					- field list
-		
+		generateTable();
+		//decide if to start the mode
 		if(IOTools.readInt("start mode? ") == 1 ){
 			this.startMode();
 		}else{
@@ -202,7 +230,7 @@ public class TournamentMode_KO extends TournamentMode {
 		 */
 //		System.out.println("[start generatemodeplan]input teams size: " + inputTeams.size());
 		//amount of teams 4 ko planning
-		int teamAmount = inputTeams.size();
+		int teamAmount = teamsInTournament.size();
 		
 //		int teamAmount = 17;
 		
@@ -327,8 +355,8 @@ public class TournamentMode_KO extends TournamentMode {
 		//iteration 1 - teams A
 		int teamCounter = 0;								//start use first team in inputTeam list
 		for (Match match : matchMatrix[0]) {
-			if (teamCounter < inputTeams.size()){
-				match.setTeamA(inputTeams.get(teamCounter));
+			if (teamCounter < teamsInTournament.size()){
+				match.setTeamA(teamsInTournament.get(teamCounter));
 				teamCounter++;
 			}else{
 				match.setTeamA(new Team("WILDCARD"));
@@ -351,9 +379,9 @@ public class TournamentMode_KO extends TournamentMode {
 		//iteration 2  - every second team B
 		int skipper = 0;								//don't reset teamCounter / skipper to skip every 2nd match
 		for (Match match : matchMatrix[0]) {
-			if (teamCounter < inputTeams.size()){
+			if (teamCounter < teamsInTournament.size()){
 				if(skipper == 0){
-					match.setTeamB(inputTeams.get(teamCounter));
+					match.setTeamB(teamsInTournament.get(teamCounter));
 					teamCounter++;
 					skipper++;
 				} else if ( skipper ==1){
@@ -386,9 +414,9 @@ public class TournamentMode_KO extends TournamentMode {
 		
 		//iteration 3 - fill gaps
 		for (Match match : matchMatrix[0]) {
-			if (teamCounter < inputTeams.size()){					//there are more teams in list AND
+			if (teamCounter < teamsInTournament.size()){					//there are more teams in list AND
 				if(match.getTeamB() == null){						//team is not set
-					match.setTeamB(inputTeams.get(teamCounter));
+					match.setTeamB(teamsInTournament.get(teamCounter));
 					teamCounter++;
 				}
 			}else{													//there are NO more teams in list AND
@@ -475,12 +503,13 @@ public class TournamentMode_KO extends TournamentMode {
 		while(true){
 			String roundMenue =  "-----Round IO---------\n"
 									+ "\n"
-					  				+ "1 - aktuelle runden info anzeigen\n"
-									+ "2 - live runde\n"
+					  				+ "1 - \n"
+									+ "2 - aktuelle runden info\n"
 					  				+ "3 - ergebnis eingabe\n"
 									+ "4 - runde abschließen\n"
 					  				+ "5 - nächste runde\n"
 					  				+ "6 - live tabelle\n"
+					  				+ "7 - zufallsrunde\n"
 									+ "\n"
 					  				+ "0 - velassen\n"
 					  				+ "99 - Desktop\n";
@@ -488,24 +517,29 @@ public class TournamentMode_KO extends TournamentMode {
 			System.out.println(roundMenue);
 			switch (IOTools.readInt()) {
 			case 1:
-				this.showActualRoundInfo();
+//				this.showActualRoundInfo();
 				break;
 			case 2:
-				this.updateMatchesInActualRound();
-				this.showActualRoundInfo();
+				updateMatchesInActualRound();
+				showActualRoundInfo();
 				break;
 			case 3:
-				this.scoreInput();
+				scoreInput();
 				break;
 			case 4:
-				this.finalizeActualRound();
+				finalizeActualRound();
 				break;
 			case 5:
-				this.jump2NextRound();
+				jump2NextRound();
 				break;
 			case 6:
-				this.generateTable();
-				this.showTable();
+				updateMatchesInActualRound();
+				progressAllMatches2Table();
+				modeTable.printTable();		
+				ModeTableIOInterface.IOMenue(modeTable);
+				break;
+			case 7:
+				makeRandomRound();
 				break;
 			case 99:
 				MainInterface.quitWOSave();
@@ -518,24 +552,53 @@ public class TournamentMode_KO extends TournamentMode {
 	
 	
 	
+	private void makeRandomRound() {
+		for (Match m2 : matchMatrix[actualRound]) {
+			if(m2 != null){
+				int a = (int)(Math.random()*25);
+				int b = (int)(Math.random()*25);
+				if(a > b){
+					a = 25;
+				}
+				if(a < b){
+					b = 25;
+				}
+				m2.setPointsTeamA(a);
+				m2.setPointsTeamB(b);
+				if(m2.getTeamA().isWILDCARD()){
+					m2.setPointsTeamA(0);
+					m2.setPointsTeamB(25);
+				}
+				if(m2.getTeamB().isWILDCARD()){
+					m2.setPointsTeamA(25);
+					m2.setPointsTeamB(0);
+				}
+			}
+		}
+	}
+
 	/* (non-Javadoc)
 	 * @see datatypes.TournamentMode#generateTable()
 	 */
-	@Override
-	protected void generateTable() {
-		super.generateTable();
-		
-		/**
-		 * fields in table
-		 * team-name - 	games - w/l -	points -	place 
-		 * the team		3		+2 		+22			3
-		 */
-		
-		/**
-		 * TODO datatype mode-table
-		 */
-		
-	}
+//	@Override
+//	protected void generateTable() {
+//		super.generateTable();
+//		
+//		/**
+//		 * fields in table
+//		 * team-name - 	games - w/l -	points -	place 
+//		 * the team		3		+2 		+22			3
+//		 */
+//		
+//		/**
+//		 * TODO datatype mode-table
+//		 */
+//		
+//	}
+//	
+//	protected void updateTable(){
+//		
+//	}
 
 	private void scoreInput() {
 		for (Match m1 : matchMatrix[actualRound]) {
@@ -556,6 +619,15 @@ public class TournamentMode_KO extends TournamentMode {
 		}
 		if(noMatch){
 			System.out.println("no such match");
+		}
+	}
+	
+	private void progressAllMatches2Table(){
+		for (Match m2 : matchMatrix[actualRound]) {
+			if(m2 != null){
+				modeTable.progressMatch(m2);
+//				break;
+			}
 		}
 	}
 
@@ -608,7 +680,7 @@ public class TournamentMode_KO extends TournamentMode {
 	@Override
 	public String toString() {
 		String out = "TournamentMode_KO [\n";
-		for (Team team : inputTeams) {
+		for (Team team : teamsInTournament) {
 			out += team.getTeamName() + "\n";
 		}
 		out += "]\n";

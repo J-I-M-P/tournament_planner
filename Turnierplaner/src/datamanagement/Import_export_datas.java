@@ -124,7 +124,7 @@ public class Import_export_datas {
 					
 					//split 
 					String[] splitLine = line.split(";");
-					int id = Integer.valueOf(splitLine[0]);
+//					int id = Integer.valueOf(splitLine[0]);
 					String teamName = splitLine[1];
 					for (int i = 2; i < splitLine.length; i++) {
 						int playerID = Integer.valueOf(splitLine[i]);
@@ -152,7 +152,6 @@ public class Import_export_datas {
 	 * 
 	 * @param userOKisNeeded true if user has to decide if to import or not
 	 */
-	@SuppressWarnings("deprecation")
 	public static void importAllTournamentsFromOverview(boolean userOKisNeeded){
 
 		/**
@@ -182,7 +181,7 @@ public class Import_export_datas {
 						 * TODO
 						 * date format
 						 */
-						java.sql.Date tourDate = new java.sql.Date(0);
+						//java.sql.Date tourDate = new java.sql.Date(0);
 						//date last edit
 						System.out.println(" - date last modified: "+splitLine[3]);
 						System.out.println(line);

@@ -1,12 +1,9 @@
 package userinterface;
 
-import javax.swing.plaf.synth.SynthSpinnerUI;
-
 import Prog1Tools.IOTools;
 import datamanagement.Import_export_datas;
 import datatypes.Player;
 import datatypes.Team;
-import obsolet.DataIO;
 
 public class DBManager {
 	
@@ -102,6 +99,7 @@ public class DBManager {
 	 * all players have right amount of data
 	 * if not  maybe fix this automatically
 	 */
+	@SuppressWarnings("unused")
 	private void checkDataBaseIntegrity(){
 		
 	}

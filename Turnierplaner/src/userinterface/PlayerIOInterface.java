@@ -1,7 +1,5 @@
 package userinterface;
 
-import java.nio.channels.ShutdownChannelGroupException;
-
 import Prog1Tools.IOTools;
 import datamanagement.Import_export_datas;
 import datatypes.Player;
@@ -70,11 +68,6 @@ public class PlayerIOInterface {
 	}
 	
 	public static int removePlayerDialogue(){
-		return 0;
-		
-	}
-	
-	private static int playerRemoveFunction(){
 		return 0;
 		
 	}

@@ -1,12 +1,10 @@
 package datatypes;
 
-import java.text.Format;
-
 import Prog1Tools.IOTools;
 
 public class Match {
 	
-	public enum result{
+	public static enum result{
 		WIN_A, DRAWN, WIN_B
 	}
 	
@@ -200,6 +198,7 @@ public class Match {
 			if (pointsTeamA == pointsTeamB){
 				/**
 				 * TODO maybe ask user / at beginning in tournament options
+				 * for other modes is this a draw
 				 */
 				this.progress(2);
 			}else {
@@ -243,6 +242,9 @@ public class Match {
 			break;
 		case DRAWN:
 			//K.O. ==> no draw!
+			/**
+			 * TODO implement later for other modes
+			 */
 			break;
 		default:
 			break;
@@ -250,7 +252,6 @@ public class Match {
 		
 		//determine score
 		score = String.format("(%02d - %02d)", this.pointsTeamA,this.pointsTeamB);
-	
 		
 	}
 	

@@ -1,15 +1,10 @@
 package userinterface;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 import Prog1Tools.IOTools;
 import datamanagement.Import_export_datas;
-import datatypes.Player;
 import datatypes.Team;
-import datatypes.TournamentMode;
 import datatypes.TournamentMode_KO;
-import datatypes.Mode_Table;
-import obsolet.DataIO;
 import starter.StarterClass;
 
 public class MainInterface {
@@ -17,7 +12,7 @@ public class MainInterface {
 	
 	
 	public static void showWelcomeMessage(){
-		String welcomeMessage =   "Willkommen beim Turniermanager\n"
+		String welcomeMessage =   "Willkommen beim Turniermanager \n"
 								+ "------------------------------";
 		System.out.println(welcomeMessage);
 	}
@@ -68,7 +63,8 @@ public class MainInterface {
 				ArrayList<Team> in = new ArrayList<>();
 				in.addAll(Import_export_datas.allTeams);
 //				in.addAll(Import_export_datas.allTeams);
-				TournamentMode_KO tourMode1_KO = new TournamentMode_KO(in);
+				//tournament id = 0 --> tournamentmode_ko(in,0)
+				TournamentMode_KO tourMode1_KO = new TournamentMode_KO(in,0);
 //				System.out.println(mode1);
 				/**
 				 * wishlist
@@ -76,7 +72,6 @@ public class MainInterface {
 				 * 
 				 * look in TournamentMode_KO
 				 */
-				
 				tourMode1_KO.prepare();
 				
 				
@@ -96,31 +91,42 @@ public class MainInterface {
 //				Import_export_datas.importTournament2allTournaments(IOTools.readString("filename: "));
 				break;
 			case 7:
-//				int randomI;
-//				double randomD;
-//				randomD = Math.random();
-//				System.out.println(randomD);
+				int randomI;
+				double randomD;
+				for (int i = 0; i < 10; i++) {
+					randomD = Math.random();
+					System.out.println("d: " + randomD);
+					randomI = (int)(randomD*25);
+					System.out.println("i: " + randomI);
+				}
 				
 				
 				
-				Mode_Table table1 = new Mode_Table(0);
 				
-//				table1.test();
+//				Mode_Table table1 = new Mode_Table(0);
+//				
+////				table1.test();
+//				
+//				table1.addTeam(0);
+//				table1.addTeam(1);
+//				table1.addTeam(2);
+//				table1.addTeam(3);
+//				table1.addTeam(4);
+//				System.out.println("unsortiert");
+//				table1.printTable();
+//				System.out.println("nach name");
+//				table1.sortBy("byName");
+//				table1.printTable();
+//				System.out.println("nach kleinen punkten");
+//				table1.sortBy("byLittlePoints");
+//				table1.printTable();
 				
-				table1.addTeam(0);
-				table1.addTeam(1);
-				table1.addTeam(2);
-				table1.addTeam(3);
-				table1.addTeam(4);
-				System.out.println("unsortiert");
-				table1.printTable();
-				System.out.println("nach name");
-				table1.sortBy("byName");
-				table1.printTable();
-				System.out.println("nach kleinen punkten");
-				table1.sortBy("byLittlePoints");
-				table1.printTable();
-				
+				break;
+			case 8:
+				/**
+				 * TODO driver implementieren!!!
+				 */
+				database.DataBaseTest.test();
 				break;
 			case 0:
 				saveAndQuit();
